@@ -1,23 +1,101 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: web-rollouts
+  name: rollout-canary
 spec:
-  replicas: 7
-  strategy:
-    canary:
-      canaryService: agent-territory-management
-      stableService: string
-      steps:
-        - setWeight: 20
-        - pause: {}
-        - setWeight: 40
-        - pause: { duration: 10 }
-        - setWeight: 60
-        - pause: { duration: 10 }
-        - setWeight: 80
-        - pause: { duration: 10 }
-  revisionHistoryLimit: 2
+  replicas: 5
   selector:
     matchLabels:
       environment: prod
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: agent-territory-management
+
+  minReadySeconds: 30
+  revisionHistoryLimit: 3
+  progressDeadlineSeconds: 600
+
+  strategy:
+    canary:
+      # Definindo os serviços
+      canaryService: canary-service
+      stableService: stable-service
+
+      # Configuração de tráfego
+      trafficRouting:
+        istio:
+          virtualService:
+            name: rollout-vsvc
+            routes:
+              - primary
+              - canary
+            stableWeight: 0
+            canaryWeight: 100
+            steps:
+              - setWeight: 10
+              - pause:
+                  duration: 1m
+
+      # Configuração de escalabilidade
+      maxUnavailable: 1
+      maxSurge: "20%"
+      scaleDownDelaySeconds: 30
+      minPodsPerReplicaSet: 2
+      scaleDownDelayRevisionLimit: 2
+
+      # Configuração de análise
+      analysis:
+        templates:
+          - templateName: success-rate
+        args:
+          - name: service-name
+            value: guestbook-svc.default.svc.cluster.local
+          - name: stable-hash
+            valueFrom:
+              podTemplateHashValue: Stable
+          - name: latest-hash
+            valueFrom:
+              podTemplateHashValue: Latest
+          - name: region
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['region']
+      steps:
+        - setWeight: 20
+        - pause:
+            duration: 1h
+        - pause: {}
+        - setCanaryScale:
+            replicas: 3
+        - setCanaryScale:
+            weight: 25
+        - setCanaryScale:
+            matchTrafficWeight: true
+        - setHeaderRoute:
+            name: "header-route-1"
+            match:
+              - headerName: "version"
+                headerValue:
+                  exact: "2"
+                  regex: "2.0.(.*)"
+                  prefix: "2.0"
+        - setMirrorRoute:
+            name: "header-route-1"
+            percentage: 100
+            match:
+              - method:
+                  exact: "GET"
+                  regex: "P.*"
+                  prefix: "POST"
+                path:
+                  exact: "/test"
+                  regex: "/test/.*"
+                  prefix: "/"
+                headers:
+                  agent-1b:
+                    exact: "firefox"
+                    regex: "firefox2(.*)"
+                    prefix: "firefox"
+
+  pause: true
