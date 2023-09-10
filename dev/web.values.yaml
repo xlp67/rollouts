@@ -36,7 +36,3 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/security-groups: sg-30a68c54
     alb.ingress.kubernetes.io/subnets: subnet-0b58187c,subnet-38593d61
-
-service:
-  name: agent-territory-management
-  type: NodePort
