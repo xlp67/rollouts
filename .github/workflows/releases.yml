@@ -1,4 +1,4 @@
-name: deploy
+name: tag
 
 on:
   workflow_dispatch:
