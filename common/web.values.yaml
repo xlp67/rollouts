@@ -1,7 +1,7 @@
 app:
   logRoot: /var/www/logs
 
-appName: agent-territory-management-web-canary
+appName: agent-territory-management-web
 
 http:
   app:
