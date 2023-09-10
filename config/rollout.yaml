@@ -3,10 +3,10 @@ kind: Rollout
 metadata:
   name: web-rollouts
 spec:
-  replicas: 5
+  replicas: 7
   strategy:
     canary:
-      canaryService: string
+      canaryService: agent-territory-management
       stableService: string
       steps:
         - setWeight: 20
