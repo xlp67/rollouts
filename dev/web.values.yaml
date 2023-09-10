@@ -38,5 +38,5 @@ ingress:
     alb.ingress.kubernetes.io/subnets: subnet-0b58187c,subnet-38593d61
 
 service:
-  name: agent-territory-management-canary
+  name: agent-territory-management
   type: NodePort
