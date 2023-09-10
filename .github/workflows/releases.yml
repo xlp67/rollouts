@@ -24,7 +24,7 @@ jobs:
       - name: Get Latest Release Version
         id: get-release
         run: |
-          RELEASE_VERSION_LATEST=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/julinux-io/agent-territory-management/releases/latest | jq -r '.tag_name')
+          RELEASE_VERSION_LATEST=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/xlp67/rollouts/releases/latest | jq -r '.tag_name')
           echo "::set-output name=version::$RELEASE_VERSION_LATEST"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
