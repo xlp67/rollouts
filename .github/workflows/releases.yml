@@ -1,0 +1,32 @@
+name: tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tagName:
+        description: "Tag name"
+        required: true
+        default: "dev"
+  push:
+    branches:
+      - strategy-deploy
+jobs:
+  update-dev-env-image-tag:
+    runs-on: ubuntu-latest
+    environment: dev
+    name: Update Dev Image Tag
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: strategy-deploy
+
+      - name: Update to dev image tag
+        uses: fjogeleit/yaml-update-action@v0.10.0
+        with:
+          valueFile: "dev/web.values.yaml"
+          method: update
+          propertyPath: "app.image.tag"
+          value: "${{ github.event.inputs.tagName }}"
+          branch: strategy-deploy
+          createPR: false
+          message: "Update Dev image tag to ${{ github.event.inputs.tagName }}"
