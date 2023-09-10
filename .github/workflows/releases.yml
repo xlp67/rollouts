@@ -6,7 +6,7 @@ on:
       tagName:
         description: "Tag name"
         required: true
-        default: "dev"
+        default: "strategy"
   push:
     branches:
       - strategy-deploy
