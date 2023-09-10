@@ -3,6 +3,7 @@ name: Update Tag Image
 on:
   release:
     types: [created, edited]
+    branches: strategy-deploy
 
 permissions:
   id-token: write
@@ -34,6 +35,6 @@ jobs:
           sed -i "s/tag: \".*\"/tag: \"$RELEASE_VERSION_LATEST\"/g" common/web.values.yaml
           git add common/web.values.yaml
           git commit -m "modifying image tag"
-          git push -f origin fake-main-deploy
+          git push -f origin strategy-deploy
         env:
           RELEASE_VERSION_LATEST: ${{ steps.get-release.outputs.version }}
