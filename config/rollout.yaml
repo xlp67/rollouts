@@ -19,23 +19,8 @@ spec:
   strategy:
     canary:
       # Definindo os serviços
-      canaryService: canary-service
-      stableService: stable-service
-
-      # Configuração de tráfego
-      trafficRouting:
-        istio:
-          virtualService:
-            name: rollout-vsvc
-            routes:
-              - primary
-              - canary
-            stableWeight: 0
-            canaryWeight: 100
-            steps:
-              - setWeight: 10
-              - pause:
-                  duration: 1m
+      canaryService: agent-territory-management-canary
+      stableService: agent-territory-management
 
       # Configuração de escalabilidade
       maxUnavailable: 1
@@ -43,59 +28,3 @@ spec:
       scaleDownDelaySeconds: 30
       minPodsPerReplicaSet: 2
       scaleDownDelayRevisionLimit: 2
-
-      # Configuração de análise
-      analysis:
-        templates:
-          - templateName: success-rate
-        args:
-          - name: service-name
-            value: guestbook-svc.default.svc.cluster.local
-          - name: stable-hash
-            valueFrom:
-              podTemplateHashValue: Stable
-          - name: latest-hash
-            valueFrom:
-              podTemplateHashValue: Latest
-          - name: region
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.labels['region']
-      steps:
-        - setWeight: 20
-        - pause:
-            duration: 1h
-        - pause: {}
-        - setCanaryScale:
-            replicas: 3
-        - setCanaryScale:
-            weight: 25
-        - setCanaryScale:
-            matchTrafficWeight: true
-        - setHeaderRoute:
-            name: "header-route-1"
-            match:
-              - headerName: "version"
-                headerValue:
-                  exact: "2"
-                  regex: "2.0.(.*)"
-                  prefix: "2.0"
-        - setMirrorRoute:
-            name: "header-route-1"
-            percentage: 100
-            match:
-              - method:
-                  exact: "GET"
-                  regex: "P.*"
-                  prefix: "POST"
-                path:
-                  exact: "/test"
-                  regex: "/test/.*"
-                  prefix: "/"
-                headers:
-                  agent-1b:
-                    exact: "firefox"
-                    regex: "firefox2(.*)"
-                    prefix: "firefox"
-
-  pause: true
