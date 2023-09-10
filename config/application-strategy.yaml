@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: agent-territory-management
+  namespace: argocd
+  labels:
+    app: nhds
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    path: .
+    repoURL: "https://github.com/xlp67/rollouts.git"
+    targetRevision: strategy-deploy
+    plugin: {}
+  destination:
+    namespace: default
+    server: "https://kubernetes.default.svc"
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - Validate=false
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

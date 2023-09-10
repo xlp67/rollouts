@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollout
+  namespace: default
+spec:
+  replicas: 10
+  strategy:
+    trafficRouting:
+      istio:
+        virtualService:
+          name: <STABLE_SERVICE>-vs # required
+          routes:
+            - canary # optional if there is a single route in VirtualService, required otherwise
