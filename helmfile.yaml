@@ -19,7 +19,7 @@ releases:
     namespace: develop
     values:
       - ./common/web.values.yaml
-      - ./{{ .Environment.Name }}/web.values.yaml
+      - ./prod/web.values.yaml
     secrets:
       - ./web-secrets.sops.yaml
 
