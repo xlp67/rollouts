@@ -1,0 +1,39 @@
+name: Update Tag Image
+
+on:
+  release:
+    types: [created, edited]
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  update-values-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: fake-main-deploy
+
+      - name: Git Config
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Get Latest Release Version
+        id: get-release
+        run: |
+          RELEASE_VERSION_LATEST=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/julinux-io/agent-territory-management/releases/latest | jq -r '.tag_name')
+          echo "::set-output name=version::$RELEASE_VERSION_LATEST"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Image Tag
+        run: |
+          sed -i "s/tag: \".*\"/tag: \"$RELEASE_VERSION_LATEST\"/g" common/web.values.yaml
+          git add common/web.values.yaml
+          git commit -m "modifying image tag"
+          git push -f origin fake-main-deploy
+        env:
+          RELEASE_VERSION_LATEST: ${{ steps.get-release.outputs.version }}
