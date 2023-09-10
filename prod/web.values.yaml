@@ -1,6 +1,6 @@
 image:
   repository: nhds/agent-territory-management
-  tag: "latest"
+  tag: "1.0.0"
   imagePullSecrets:
     enabled: true
 http:
