@@ -2,29 +2,12 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: rollout-canary
+  namespace: default
 spec:
-  replicas: 5
-  selector:
-    matchLabels:
-      environment: prod
-  workloadRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: agent-territory-management
-
-  minReadySeconds: 30
-  revisionHistoryLimit: 3
-  progressDeadlineSeconds: 600
-
+  replicas: 10
   strategy:
-    canary:
-      # Definindo os serviços
-      canaryService: agent-territory-management-canary
-      stableService: agent-territory-management
-
-      # Configuração de escalabilidade
-      maxUnavailable: 1
-      maxSurge: "20%"
-      scaleDownDelaySeconds: 30
-      minPodsPerReplicaSet: 2
-      scaleDownDelayRevisionLimit: 2
+    blueGreen:
+      activeService: prod
+      previewService: prod-1
+      autoPromotionEnabled: false
+  revisionHistoryLimit: 2

@@ -15,7 +15,7 @@ spec:
     targetRevision: strategy-deploy
     plugin: {}
   destination:
-    namespace: canary
+    namespace: develop
     server: "https://kubernetes.default.svc"
   syncPolicy:
     automated: {}

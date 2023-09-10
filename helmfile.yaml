@@ -22,6 +22,17 @@ releases:
       - ./dev/web.values.yaml
     secrets:
       - ./web-secrets.sops.yaml
+    hooks:
+      - events:
+          - "preapply"
+        command: "kubectl"
+        args:
+          [
+            "label",
+            "namespace",
+            "{{`{{.Release.Namespace}}`}}",
+            "istio-injection=enabled",
+          ]
 
   # - name: graphql
   #   chart: standard-app/standard-app
