@@ -1,0 +1,76 @@
+app:
+  logRoot: /var/www/logs
+
+appName: agent-territory-management-web
+
+http:
+  app:
+    envVarsRaw:
+      - name: REACT_APP_GQL_AUTH
+        valueFrom:
+          secretKeyRef:
+            name: hasura
+            key: admin-secret
+    readinessProbe:
+      tcpSocket:
+        port: 3000
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 2048Mi
+  logs:
+    app:
+      - express.log
+
+  # priorityClassName: internal-frontend-important
+
+nginx:
+  confTemplates:
+    facade.conf: |
+      # the IP(s) on which your node server is running. I chose port 3000.
+      upstream node_server {
+        server 127.0.0.1:3000;
+        keepalive 8;
+      }
+
+      # the nginx server instance
+      server {
+        listen 80 default_server;
+
+        rewrite ^/(.*)/$ /$1 permanent;
+
+        error_log /var/log/nginx/error.log;
+        access_log /var/log/nginx/access.log;
+
+        location /healthz/ingress {
+          access_log off;
+          return 200 "ok";
+        }
+
+        # pass the request to the node.js server with the correct headers
+        # and much more can be added, see nginx config options
+        location / {
+          if ($request_uri ~*  \.(?:jpg|jpeg|gif|css|png|js|ico)$) {
+            access_log off;
+          }
+
+          expires off;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header Host $http_host;
+          proxy_set_header X-NginX-Proxy true;
+
+          proxy_pass http://node_server/;
+          proxy_redirect off;
+        }
+      }
+
+service:
+  name: agent-territory-management
+  type: NodePort
