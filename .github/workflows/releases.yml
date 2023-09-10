@@ -31,8 +31,8 @@ jobs:
 
       - name: Update Image Tag
         run: |
-          sed -i "s/tag: \".*\"/tag: \"$RELEASE_VERSION_LATEST\"/g" prod/web.values.yaml
-          git add prod/web.values.yaml
+          sed -i "s/tag: \".*\"/tag: \"$RELEASE_VERSION_LATEST\"/g" dev/web.values.yaml
+          git add dev/web.values.yaml
           git commit -m "modifying image tag"
           git push -f origin strategy-deploy
         env:
