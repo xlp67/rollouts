@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: fake-main-deploy
+          ref: strategy-deploy
 
       - name: Git Config
         run: |
