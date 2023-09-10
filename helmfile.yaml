@@ -23,24 +23,24 @@ releases:
     secrets:
       - ./web-secrets.sops.yaml
 
-  - name: graphql
-    chart: standard-app/standard-app
-    namespace: develop
-    values:
-      - ./common/graphql.values.yaml
-      - ./{{ .Environment.Name }}/graphql.values.yaml
-    secrets:
-      - ./graphql-secrets.sops.yaml
+  # - name: graphql
+  #   chart: standard-app/standard-app
+  #   namespace: develop
+  #   values:
+  #     - ./common/graphql.values.yaml
+  #     - ./{{ .Environment.Name }}/graphql.values.yaml
+  #   secrets:
+  #     - ./graphql-secrets.sops.yaml
 
-  - name: varnish
-    chart: standard-app/standard-app
-    namespace: develop
-    values:
-      - ./common/varnish.values.yaml
-      - ./{{ .Environment.Name }}/varnish.values.yaml
+  # - name: varnish
+  #   chart: standard-app/standard-app
+  #   namespace: develop
+  #   values:
+  #     - ./common/varnish.values.yaml
+  #     - ./{{ .Environment.Name }}/varnish.values.yaml
 
-  - name: tiles
-    chart: standard-app/standard-app
-    namespace: develop
-    values:
-      - ./common/tiles.values.yaml
+  # - name: tiles
+  #   chart: standard-app/standard-app
+  #   namespace: develop
+  #   values:
+  #     - ./common/tiles.values.yaml
