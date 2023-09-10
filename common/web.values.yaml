@@ -4,6 +4,8 @@ app:
 appName: agent-territory-management-web
 
 http:
+  labels:
+    environment: prod
   app:
     envVarsRaw:
       - name: REACT_APP_GQL_AUTH
