@@ -24,7 +24,7 @@ releases:
       - ./web-secrets.sops.yaml
     hooks:
       - events:
-          - "preapply"
+          - "prepare"
         command: "kubectl"
         args:
           [
