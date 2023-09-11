@@ -1,13 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: rollout-canary
-  namespace: default
+  name: rollout
 spec:
-  replicas: 10
   strategy:
-    blueGreen:
-      activeService: prod
-      previewService: prod-1
-      autoPromotionEnabled: false
-  revisionHistoryLimit: 2
+    canary:
+      steps:
+        - setWeight: 20
+        - pause:
+            duration: "10"
+        - setWeight: 50
+        - pause:
+            duration: "20"
+      # canaryService: nginx-canary.canary.svc.cluster.local
+      # stableService: nginx-prod.default.svc.cluster.local
+      trafficRouting:
+        istio:
+          virtualService:
+            name: istio-vs
+            routes:
+              - canary
