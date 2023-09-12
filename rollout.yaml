@@ -15,8 +15,8 @@ spec:
           additionalIngressAnnotations:
             canary: "true"
             canary-weight: "25"
-      # steps:
-      #   - setWeight: 20
+      steps:
+        - setWeight: 20
       #   - pause: { duration: 10 }
       #   - setWeight: 20
       #   - pause: { duration: 30 }
