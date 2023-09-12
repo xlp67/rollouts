@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rollout
+  name: rollout-deployment
   labels:
     app: web
   annotations:
@@ -9,7 +9,6 @@ metadata:
     prometheus.io/path: "/metrics"
     prometheus.io/port: "80"
 spec:
-  replicas: 3
   selector:
     matchLabels:
       v1: green
