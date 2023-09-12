@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollout
+spec:
+  replicas: 1
+  strategy:
+    canary:
+      canaryService: "app-blue"
+      stableService: "app-green"
+      trafficRouting:
+        nginx:
+          stableIngress: "app-green"
+          annotationPrefix: "nginx.ingress.kubernetes.io"
+          additionalIngressAnnotations:
+            canary: "true"
+            canary-weight: "20"
+      steps:
+        - setWeight: 20
+        - pause: { duration: 30 }
+        - setWeight: 40
+        - pause: { duration: 15 }
+        - setWeight: 60
+        - pause: { duration: 8 }
+        - setWeight: 80
+        - pause: { duration: 5 }
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      v1: green
+      v2: blue
+  template:
+    metadata:
+      labels:
+        v1: green
+        v2: blue
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "80"
+    spec:
+      containers:
+        - name: app
+          image: xlp67/girus1
+          ports:
+            - containerPort: 80

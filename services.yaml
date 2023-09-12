@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-green
+  labels:
+    release: web
+    role: green
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/"
+    prometheus.io/port: "80"
+spec:
+  selector:
+    v1: green
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-blue
+  labels:
+    release: web
+    role: blue
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/"
+    prometheus.io/port: "80"
+spec:
+  selector:
+    v2: blue
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP

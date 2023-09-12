@@ -1,57 +1,66 @@
 environments:
   dev:
     values:
-      - clusterName: agent-territory-management
-  prod:
-    values:
-      - clusterName: agent-territory-management
+      - clusterName: argocd-conf
 ---
 repositories:
-  - name: standard-app
-    url: https://julinux-io.github.io/standard-app/
+  - name: istio
+    url: https://istio-release.storage.googleapis.com/charts
+
+  - name: argo
+    url: https://argoproj.github.io/argo-helm
+
+  - name: cert-manager
+    url: https://charts.jetstack.io
+
+  - name: nginx
+    url: https://helm.nginx.com/stable
 
 helmDefaults:
   createNamespace: true
 
 releases:
-  - name: web
-    chart: standard-app/standard-app
-    namespace: develop
-    values:
-      - ./common/web.values.yaml
-      - ./dev/web.values.yaml
-    secrets:
-      - ./web-secrets.sops.yaml
+  - name: istio
+    namespace: istio-system
+    labels:
+      app: istio.io
+    chart: istio.io/istio
+    version: "1.3.2"
+
+  - name: argocd
+    namespace: argocd
+    labels:
+      app: argocd
+    chart: argo/argo-cd
+    version: "~5.34.6"
+
+  - name: argocd-rollouts
+    namespace: argocd
+    labels:
+      app: argocd
+    chart: argo/argo-rollouts
+    version: "2.32.0"
+    set:
+      - name: dashboard.enabled
+        value: true
+
+  - name: cert-manager
+    namespace: cert-manager
+    chart: cert-manager/cert-manager
+    version: 1.12.2
     hooks:
-      - events:
-          - "prepare"
-        command: "kubectl"
-        args:
-          [
-            "label",
-            "namespace",
-            "{{`{{.Release.Namespace}}`}}",
-            "istio-injection=enabled",
-          ]
+      - events: ["prepare"]
+        command: "./cert-manager-crds.sh"
+    values:
+      - serviceAccount:
+          annotations:
+            {
+              eks.amazonaws.com/role-arn: arn:aws:iam::916001899522:role/cert-manager,
+            }
 
-  # - name: graphql
-  #   chart: standard-app/standard-app
-  #   namespace: develop
-  #   values:
-  #     - ./common/graphql.values.yaml
-  #     - ./{{ .Environment.Name }}/graphql.values.yaml
-  #   secrets:
-  #     - ./graphql-secrets.sops.yaml
-
-  # - name: varnish
-  #   chart: standard-app/standard-app
-  #   namespace: develop
-  #   values:
-  #     - ./common/varnish.values.yaml
-  #     - ./{{ .Environment.Name }}/varnish.values.yaml
-
-  # - name: tiles
-  #   chart: standard-app/standard-app
-  #   namespace: develop
-  #   values:
-  #     - ./common/tiles.values.yaml
+  - name: nginx-ingress
+    namespace: nginx-ingress
+    labels:
+      app: nginx-ingress
+    chart: nginx/nginx-ingress
+    version: "0.18.1"

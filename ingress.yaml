@@ -1,0 +1,92 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-green
+  labels:
+    app: green
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    ingress.kubernetes.io/force-ssl-redirect: "false"
+    ingress.kubernetes.io/ssl-redirect: "false"
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: test.dev.juliosaraiva.com
+      http:
+        paths:
+          - pathType: "Prefix"
+            path: "/v1"
+            backend:
+              service:
+                name: app-green
+                port:
+                  number: 80
+# tls:
+#   - hosts:
+#       - test.dev.juliosaraiva.com
+#     secretName: "letsencrypt"
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-blue
+  labels:
+    app: blue
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    ingress.kubernetes.io/force-ssl-redirect: "false"
+    ingress.kubernetes.io/ssl-redirect: "false"
+    ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/canary: "true"
+    ingress.kubernetes.io/canary-weight: "20"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: test.dev.juliosaraiva.com
+      http:
+        paths:
+          - pathType: "Prefix"
+            path: "/v2"
+            backend:
+              service:
+                name: app-blue
+                port:
+                  number: 80
+# tls:
+#   - hosts:
+#       - test.dev.juliosaraiva.com
+#     secretName: "letsencrypt"
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rollout
+  namespace: argocd
+  labels:
+    app: blue
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    ingress.kubernetes.io/force-ssl-redirect: "false"
+    ingress.kubernetes.io/ssl-redirect: "false"
+    # ingress.kubernetes.io/canary: "true"
+    # ingress.kubernetes.io/canary-weight: "20"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: rollout.dev.juliosaraiva.com
+      http:
+        paths:
+          - pathType: "Prefix"
+            path: "/"
+            backend:
+              service:
+                name: argocd-rollouts-argo-rollouts-dashboard
+                port:
+                  number: 3100
+  # tls:
+  #   - hosts:
+  #       - test.dev.juliosaraiva.com
+  #     secretName: "letsencrypt"

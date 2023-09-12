@@ -16,7 +16,7 @@ spec:
     plugin: {}
   destination:
     namespace: default
-    server: "https://kubernetes.default.svc"
+    server: "http://kubernetes.default.svc"
   syncPolicy:
     automated: {}
     syncOptions:
