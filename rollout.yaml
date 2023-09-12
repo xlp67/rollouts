@@ -43,6 +43,6 @@ spec:
     spec:
       containers:
         - name: app
-          image: xlp67/girus3
+          image: xlp67/golab
           ports:
             - containerPort: 80
