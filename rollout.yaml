@@ -3,7 +3,7 @@ kind: Rollout
 metadata:
   name: rollout
 spec:
-  replicas: 3
+  replicas: 10
   strategy:
     canary:
       canaryService: "app-blue"
@@ -17,13 +17,15 @@ spec:
             canary-weight: "20"
       steps:
         - setWeight: 20
+        - pause: { duration: 10 }
+        - setWeight: 20
         - pause: { duration: 30 }
         - setWeight: 40
-        - pause: { duration: 15 }
+        - pause: { duration: 30 }
         - setWeight: 60
-        - pause: { duration: 8 }
+        - pause: { duration: 30 }
         - setWeight: 80
-        - pause: { duration: 5 }
+        - pause: { duration: 30 }
   revisionHistoryLimit: 2
   selector:
     matchLabels:
