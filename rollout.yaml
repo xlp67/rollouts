@@ -14,7 +14,7 @@ spec:
           annotationPrefix: "nginx.ingress.kubernetes.io"
           additionalIngressAnnotations:
             canary: "true"
-            canary-weight: 25
+            canary-weight: "25"
       # steps:
       #   - setWeight: 20
       #   - pause: { duration: 10 }
