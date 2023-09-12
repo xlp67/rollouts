@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: app-green
-          image: xlp67/girus1
+          image: xlp67/girus2
           resources:
             limits:
               memory: "128Mi"
