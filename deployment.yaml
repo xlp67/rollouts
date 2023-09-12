@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rollout
+  labels:
+    app: web
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "80"
+spec:
+  selector:
+    matchLabels:
+      v1: green
+      v2: blue
+  template:
+    metadata:
+      labels:
+        v1: green
+        v2: blue
+    spec:
+      containers:
+        - name: app-green
+          image: xlp67/girus1
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80

@@ -6,15 +6,21 @@ spec:
   replicas: 1
   strategy:
     canary:
+      analysis:
+        templates:
+          - templateName: success-rate
+        args:
+          - name: service-name
+            value: app-blue.default.svc.cluster.local
       canaryService: "app-blue"
       stableService: "app-green"
       trafficRouting:
         nginx:
           stableIngress: "app-green"
-          annotationPrefix: "nginx.ingress.kubernetes.io"
-          additionalIngressAnnotations:
-            canary: "true"
-            canary-weight: "25"
+          # annotationPrefix: "nginx.ingress.kubernetes.io"
+          # additionalIngressAnnotations:
+          #   canary: "true"
+          #   canary-weight: "25"
       steps:
         - setWeight: 10
         - pause: { duration: 20 }
@@ -31,18 +37,7 @@ spec:
     matchLabels:
       v1: green
       v2: blue
-  template:
-    metadata:
-      labels:
-        v1: green
-        v2: blue
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/path: "/metrics"
-        prometheus.io/port: "80"
-    spec:
-      containers:
-        - name: app
-          image: nginx:latest
-          ports:
-            - containerPort: 80
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rollout
