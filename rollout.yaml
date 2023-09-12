@@ -41,6 +41,6 @@ spec:
     spec:
       containers:
         - name: app
-          image: xlp67/girus1
+          image: xlp67/girus2
           ports:
             - containerPort: 80
