@@ -5,10 +5,6 @@ metadata:
   labels:
     release: web
     role: green
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "/metrics"
-    prometheus.io/port: "80"
 spec:
   selector:
     v1: green
@@ -24,10 +20,6 @@ metadata:
   labels:
     release: web
     role: blue
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "/metrics"
-    prometheus.io/port: "80"
 spec:
   selector:
     v2: blue
