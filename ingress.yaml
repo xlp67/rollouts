@@ -27,33 +27,33 @@ spec:
 #       - test.dev.juliosaraiva.com
 #     secretName: "letsencrypt"
 
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: app-blue
-  labels:
-    app: blue
-  annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    ingress.kubernetes.io/force-ssl-redirect: "false"
-    ingress.kubernetes.io/ssl-redirect: "false"
-    ingress.kubernetes.io/rewrite-target: /
-    ingress.kubernetes.io/canary: "true"
-    ingress.kubernetes.io/canary-weight: "20"
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: test.dev.juliosaraiva.com
-      http:
-        paths:
-          - pathType: "Prefix"
-            path: "/"
-            backend:
-              service:
-                name: app-blue
-                port:
-                  number: 80
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: app-blue
+#   labels:
+#     app: blue
+#   annotations:
+#     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+#     ingress.kubernetes.io/force-ssl-redirect: "false"
+#     ingress.kubernetes.io/ssl-redirect: "false"
+#     ingress.kubernetes.io/rewrite-target: /
+#     ingress.kubernetes.io/canary: "true"
+#     ingress.kubernetes.io/canary-weight: "20"
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#     - host: test.dev.juliosaraiva.com
+#       http:
+#         paths:
+#           - pathType: "Prefix"
+#             path: "/"
+#             backend:
+#               service:
+#                 name: app-blue
+#                 port:
+#                   number: 80
 # tls:
 #   - hosts:
 #       - test.dev.juliosaraiva.com
