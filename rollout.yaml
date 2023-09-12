@@ -17,7 +17,7 @@ spec:
             canary-weight: "25"
       steps:
         - setWeight: 20
-        - pause: {}
+        # - pause: {}
       #   - setWeight: 20
       #   - pause: { duration: 30 }
       #   - setWeight: 40
@@ -43,6 +43,6 @@ spec:
     spec:
       containers:
         - name: app
-          image: xlp67/girus1
+          image: xlp67/girus2
           ports:
             - containerPort: 80
