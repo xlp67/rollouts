@@ -43,6 +43,6 @@ spec:
     spec:
       containers:
         - name: app
-          image: xlp67/golab
+          image: xlp67/python
           ports:
             - containerPort: 80
