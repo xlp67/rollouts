@@ -43,6 +43,6 @@ spec:
     spec:
       containers:
         - name: app
-          image: xlp67/girus3
+          image: nginx:latest
           ports:
             - containerPort: 80
