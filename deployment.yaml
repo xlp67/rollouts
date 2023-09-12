@@ -4,10 +4,7 @@ metadata:
   name: rollout-deployment
   labels:
     app: web
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "/metrics"
-    prometheus.io/port: "80"
+
 spec:
   selector:
     matchLabels:
@@ -18,6 +15,10 @@ spec:
       labels:
         v1: green
         v2: blue
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "80"
     spec:
       containers:
         - name: app-green
