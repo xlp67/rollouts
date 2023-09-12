@@ -3,7 +3,7 @@ kind: Rollout
 metadata:
   name: rollout
 spec:
-  replicas: 5
+  replicas: 4
   strategy:
     canary:
       canaryService: "app-blue"
@@ -14,7 +14,7 @@ spec:
           annotationPrefix: "nginx.ingress.kubernetes.io"
           additionalIngressAnnotations:
             canary: "true"
-            canary-weight: 20
+            canary-weight: 25
       # steps:
       #   - setWeight: 20
       #   - pause: { duration: 10 }
