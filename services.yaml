@@ -10,6 +10,7 @@ spec:
     v1: green
   ports:
     - port: 80
+      name: http
       targetPort: 80
       protocol: TCP
 ---
@@ -25,5 +26,6 @@ spec:
     v2: blue
   ports:
     - port: 80
+      name: http
       targetPort: 80
       protocol: TCP
