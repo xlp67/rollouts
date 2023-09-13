@@ -10,7 +10,7 @@ spec:
       failureLimit: 3
       provider:
         prometheus:
-          address: http://prometheus.monitoring.svc.cluster.local:9090
+          address: http://prometheus:9090
           query: |
             sum(
               prometheus_http_requests_total{reporter="source",destination_service=~"{{args.service-name}}",response_code="200"}[5m]
