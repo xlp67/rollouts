@@ -42,8 +42,9 @@ spec:
     kind: Deployment
     name: rollout-deployment
   template:
-    metadata:
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/scheme: http
-        prometheus.io/port: "9113"
+    spec:
+      metadata:
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/scheme: http
+          prometheus.io/port: "9113"
