@@ -8,6 +8,7 @@ metadata:
     prometheus.io/scrape: "true"
     prometheus.io/port: "10254"
 spec:
+  replicas: 3
   selector:
     matchLabels:
       v1: green
