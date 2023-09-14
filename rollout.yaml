@@ -40,9 +40,3 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: rollout-deployment
-  # template:
-  #   metadata:
-  #     annotations:
-  #       prometheus.io/scrape: "true"
-  #       prometheus.io/scheme: http
-  #       prometheus.io/port: "9113"
