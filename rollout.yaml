@@ -34,7 +34,6 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      v1: green
       v2: blue
   workloadRef:
     apiVersion: apps/v1
