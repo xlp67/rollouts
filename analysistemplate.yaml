@@ -5,7 +5,7 @@ metadata:
 spec:
   args:
     - name: service-name
-      value: app.default.svc.cluster.local
+      value: app-blue.default.svc.cluster.local
   metrics:
     - name: success-rate
       interval: "0.5m"
