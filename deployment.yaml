@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: xlp67/girus1
+          image: xlp67/girus2
           # lifecycle:
           #   postStart:
           #     exec:
