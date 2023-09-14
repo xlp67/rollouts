@@ -23,7 +23,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-blue
+  name: rollout-app-blue-canary
   labels:
     release: web
     role: blue
