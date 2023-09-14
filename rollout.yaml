@@ -9,7 +9,7 @@ spec:
       # analysis:
       #   templates:
       #     - templateName: success-rate
-      canaryService: "app-blue"
+      canaryService: "rollout-app-blue-canary"
       stableService: "app-green"
       trafficRouting:
         nginx:
