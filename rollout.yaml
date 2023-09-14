@@ -20,7 +20,7 @@ spec:
             port: "10254"
             path: /metrics
       steps:
-        - setCanaryScale:
+        # - setCanaryScale:
         - setWeight: 10
         - pause: { duration: 10 }
         - setWeight: 20
