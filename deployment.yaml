@@ -4,7 +4,9 @@ metadata:
   name: rollout-deployment
   labels:
     app: web
-
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "10254"
 spec:
   selector:
     matchLabels:
@@ -17,15 +19,48 @@ spec:
         v2: blue
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/scheme: "http"
-        prometheus.io/port: "9113"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "80"
     spec:
       containers:
-        - name: app-green
-          image: xlp67/girus3
-          resources:
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
+        - name: nginx
+          image: xlp67/girus1
+          # lifecycle:
+          #   postStart:
+          #     exec:
+          #       command:
+          #         - service nginx reload
+          resources: {}
           ports:
             - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+    access_log  /var/log/nginx/host.access.log  main;
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+    location /metrics {
+      stub_status on;
+    }
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+    }

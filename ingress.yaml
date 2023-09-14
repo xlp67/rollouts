@@ -5,6 +5,9 @@ metadata:
   labels:
     app: green
   annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "10254"
+    prometheus.io/path: /metrics
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     ingress.kubernetes.io/force-ssl-redirect: "false"
     ingress.kubernetes.io/ssl-redirect: "false"

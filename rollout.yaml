@@ -9,18 +9,16 @@ spec:
       # analysis:
       #   templates:
       #     - templateName: success-rate
-      #   args:
-      #     - name: service-name
-      #       value: app-blue.default.svc.cluster.local
       canaryService: "app-blue"
       stableService: "app-green"
       trafficRouting:
         nginx:
           stableIngress: "app-green"
-          # annotationPrefix: "nginx.ingress.kubernetes.io"
-          # additionalIngressAnnotations:
-          #   canary: "true"
-          #   canary-weight: "25"
+          annotationPrefix: "prometheus.io"
+          additionalIngressAnnotations:
+            scrape: "true"
+            port: "10254"
+            path: /metrics
       steps:
         - setWeight: 10
         # - pause: { duration: 20 }
@@ -41,10 +39,9 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: rollout-deployment
-  template:
-    spec:
-      metadata:
-        annotations:
-          prometheus.io/scrape: "true"
-          prometheus.io/scheme: http
-          prometheus.io/port: "9113"
+  # template:
+  #   metadata:
+  #     annotations:
+  #       prometheus.io/scrape: "true"
+  #       prometheus.io/scheme: http
+  #       prometheus.io/port: "9113"

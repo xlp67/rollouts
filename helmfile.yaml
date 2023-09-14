@@ -16,6 +16,12 @@ repositories:
   - name: nginx
     url: https://helm.nginx.com/stable
 
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+
 helmDefaults:
   createNamespace: true
 
@@ -64,3 +70,24 @@ releases:
       app: nginx-ingress
     chart: nginx/nginx-ingress
     version: "0.18.1"
+    set:
+      - name: controller.metrics.enabled
+        value: true
+      - name: controller.podAnnotations
+        values: ["prometheus.io/scrape: true", "prometheus.io/port: 10254"]
+      - name: controller.metrics.service.annotations
+        values: ["prometheus.io/scrape: true", "prometheus.io/port: 10254"]
+
+  - name: prometheus
+    namespace: monitoring
+    labels:
+      app: prometheus
+    chart: prometheus-community/prometheus
+    version: "24.5.0"
+    values:
+      - ./values/prometheus.values.yaml
+
+  - name: grafana
+    namespace: monitoring
+    chart: bitnami/grafana
+    version: 9.1.1
