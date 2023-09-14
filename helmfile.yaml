@@ -56,7 +56,7 @@ releases:
     version: 1.12.2
     hooks:
       - events: ["prepare"]
-        command: "./cert-manager-crds.sh"
+        command: "./scripts/cert-manager-crds.sh"
     values:
       - serviceAccount:
           annotations:
