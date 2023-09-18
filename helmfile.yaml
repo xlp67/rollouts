@@ -4,8 +4,8 @@ environments:
       - clusterName: argocd-conf
 ---
 repositories:
-  - name: istio
-    url: https://istio-release.storage.googleapis.com/charts
+  - name: opsmx
+    url: https://helmcharts.opsmx.com/
 
   - name: argo
     url: https://argoproj.github.io/argo-helm
@@ -26,12 +26,12 @@ helmDefaults:
   createNamespace: true
 
 releases:
-  - name: istio
-    namespace: istio-system
+  - name: spinnaker
+    namespace: spinnaker
     labels:
-      app: istio.io
-    chart: istio.io/istio
-    version: "1.3.2"
+      app: spinnaker
+    chart: opsmx/spinnaker
+    version: "2.2.7"
 
   - name: argocd
     namespace: argocd

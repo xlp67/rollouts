@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  labels:
+    app: web
+spec:
+  selector:
+    app: web
+  ports:
+    - port: 8000
+      targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-canary
+  labels:
+    app: web
+spec:
+  selector:
+    app: web
+  ports:
+    - port: 8000
+      targetPort: 80
+  type: LoadBalancer
