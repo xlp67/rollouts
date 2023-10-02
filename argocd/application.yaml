@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    path: .
+    path: ./app/v1
     repoURL: "https://github.com/xlp67/rollouts.git"
     targetRevision: strategy-deploy
   destination:

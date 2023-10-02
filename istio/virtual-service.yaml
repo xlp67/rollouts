@@ -4,7 +4,7 @@ metadata:
   name: virtual-service
 spec:
   hosts:
-    - app.default.svc.cluster.local
+    - app.default
   http:
     - match:
         - uri:
@@ -13,14 +13,14 @@ spec:
         uri: /
       route:
         - destination:
-            host: app.default.svc.cluster.local
+            host: app.default
             subset: v1
           weight: 60
         - destination:
-            host: app.default.svc.cluster.local
+            host: app.default
             subset: v2
           weight: 30
         - destination:
-            host: app.default.svc.cluster.local
+            host: app.default
             subset: v3
           weight: 10
