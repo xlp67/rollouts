@@ -22,17 +22,13 @@ repositories:
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
 
+  - name: jaegertracing
+    url: https://jaegertracing.github.io/helm-charts
+
 helmDefaults:
   createNamespace: true
 
 releases:
-  - name: spinnaker
-    namespace: spinnaker
-    labels:
-      app: spinnaker
-    chart: opsmx/spinnaker
-    version: "2.2.7"
-
   - name: argocd
     namespace: argocd
     labels:
@@ -91,3 +87,8 @@ releases:
     namespace: monitoring
     chart: bitnami/grafana
     version: 9.1.1
+
+  - name: jaeger
+    namespace: observability
+    chart: jaegertracing/jaeger
+    version: 0.71.15
