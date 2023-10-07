@@ -1,7 +1,7 @@
 environments:
   dev:
     values:
-      - clusterName: argocd-conf
+      - clusterName: giropops
 ---
 repositories:
   - name: opsmx

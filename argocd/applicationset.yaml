@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: app
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/xlp67/rollouts.git
+        revision: HEAD
+        directories:
+          - path: app/v1/k8s
+          - path: app/v1/build
+            exclude: true
+  template:
+    metadata:
+      name: app
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/xlp67/rollouts.git
+        targetRevision: HEAD
+        path: "{{path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: default
