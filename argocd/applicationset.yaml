@@ -9,12 +9,13 @@ spec:
         repoURL: https://github.com/xlp67/rollouts.git
         revision: "strategy-deploy"
         directories:
-          # - path: "app/v1/build"
           - path: "app/v1/manifests"
-          - path: "app/v2/manifests"
+    - list:
+        elements:
+          - app: app
   template:
     metadata:
-      name: app
+      name: "{{app}}"
     spec:
       project: default
       source:
