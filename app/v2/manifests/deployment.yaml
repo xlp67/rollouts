@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: metrics
-          image: xlp67/girus1
+          image: xlp67/girus2
           resources: {}
           ports:
             - containerPort: 8181

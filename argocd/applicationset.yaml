@@ -10,7 +10,8 @@ spec:
         revision: "strategy-deploy"
         directories:
           # - path: "app/v1/build"
-          - path: "app/v1/k8s"
+          - path: "app/v1/manifests"
+          - path: "app/v2/manifests"
   template:
     metadata:
       name: app

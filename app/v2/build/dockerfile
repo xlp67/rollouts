@@ -1,0 +1,15 @@
+FROM golang:1.17.0-stretch AS builder
+
+WORKDIR /gometrics
+COPY main.go .
+ENV PATH="/go/bin:${PATH}"
+ENV CGO_ENABLED=0
+RUN go mod init github.com/xlp67
+RUN go mod tidy
+RUN go build -o gometrics
+
+FROM golang:1.17.0-stretch
+WORKDIR /gometrics
+COPY --from=builder /gometrics /gometrics
+RUN chmod 770 gometrics
+CMD ["./gometrics"]
