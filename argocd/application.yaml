@@ -2,12 +2,16 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: app
+  namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/xlp67/rollouts.git
-    targetRevision: strategy-deploy
+    repoURL: "https://github.com/xlp67/rollouts.git"
     path: app/v1/k8s
+    targetRevision: strategy-deploy
   destination:
-    server: https://kubernetes.default.svc
+    server: "https://kubernetes.default.svc"
     namespace: default
+  syncPolicy:
+    automated:
+      prune: true
